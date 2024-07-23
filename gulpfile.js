@@ -13,23 +13,23 @@ const concat = require('gulp-concat');
 // Paths to files
 const paths = {
     styles: {
-        src: 'src/styles/**/*.scss', // источник откуда будут браться исходные файлы
-        dest: 'dist/css/' // конечная папка с готовыми файлами
+        src: 'src/styles/**/*.scss', // source from where the source files .scss will be taken
+        dest: 'dist/css/' // final folder with ready-made files .css
     },
     scripts: {
-        src: 'src/scripts/**/*.js', // источник где будут исходные файлы
-        dest: 'dist/js/' // конечная папка с готовыми файлами
+        src: 'src/scripts/**/*.js', // source from where the source files .js will be taken
+        dest: 'dist/js/' // final folder with ready-made files .js
     }
 };
 
 async function clean() { // Cleaning folders
     const { deleteAsync } = await import('del');
-    return deleteAsync(['dist']); // Указываем папку, которая будет очищаться
+    return deleteAsync(['dist']); // specify the folder that will be deleted
 }
 
 // Processing style files. Compilation of SCSS into CSS and other operations
 function styles() {
-    return gulp.src(paths.styles.src // Передаём путь откуда берутся файлы для обработки
+    return gulp.src(paths.styles.src // pass the path from where the files for processing come from
         //     , {
         //     sourcemaps: true
         // }
@@ -40,12 +40,12 @@ function styles() {
             //     outputStyle: 'expanded',
             //     indentWidth: 4,
             // }
-        ).on('error', sass.logError)) // Компиляция SCSS в CSS
+        ).on('error', sass.logError)) // compiling SCSS to CSS
         // .pipe(postcss([autoprefixer({
         //     cascade: false
         // })]))
         // ! .pipe(sourcemaps.write())
-        .pipe(cleanCSS()) // Минификация файлов CSS - удаление пробелов, лишних ";", всех абзацов
+        .pipe(cleanCSS()) // minification of CSS files - removal of spaces, extra ";", all paragraphs
         .pipe(rename({
             basename: 'main',
             suffix: '.min'
@@ -58,28 +58,31 @@ function scripts() {
     return gulp.src(paths.scripts.src, {
         sourcemaps: true
     })
-        .pipe(babel()) // Транспилирует код в код старого стандарта, для старых браузеров
-        .pipe(uglify()) // Минифицирует, сжимает и оптимизирует код
-        .pipe(concat('main.min.js')) // Объединяем файлы в один и сразу даём название объединённому файлу
+        .pipe(babel()) // transpiles javascript code into old standard code javascript, for old browsers
+        .pipe(uglify()) // minifies, compresses and optimizes javascript files
+        .pipe(concat('main.min.js')) // combine the files into one and immediately give the name to the combined file
         .pipe(gulp.dest(paths.scripts.dest))
 }
 
-function watch() { // Отслеживаем изменения
-    gulp.watch(paths.styles.src, styles); // Сперва указываем путь к файлам которые будем отслеживать, потом передаётся таска (функция) которая будет выполняться при изменении в этих файлах
+function watch() { // Track changes
+    gulp.watch(paths.styles.src, styles); 
+    /* first, we specify the path to the files that we will track, 
+    then a task (function) is transmitted, which 
+    will be executed when changing in these files */
     gulp.watch(paths.scripts.src, scripts);
 }
 
 
 
-// Экспортируем задачи
+// Export tasks
 exports.clean = clean; // "cleaner" - name of command in gulp, "clean" - name of our function
 exports.styles = styles;
 exports.scripts = scripts;
 exports.watch = watch;
 
-// series() выполняет задачи последовательно
+// series() performs tasks in sequence
 const buildSeris = gulp.series(clean, gulp.parallel(styles, scripts), watch);
-// const buildParalel = gulp.parallel(clean, styles); // parallel() выполняет задачи паралельно
+// const buildParalel = gulp.parallel(clean, styles); // parallel() performs tasks in parallel
 
 exports.build = buildSeris; // To run task write in terminal 'gulp build'
 exports.default = buildSeris; // Just write in terminal gulp'
