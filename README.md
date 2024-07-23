@@ -2,8 +2,8 @@
 ## Source https://youtube.com/playlist?list=PLuY6eeDuleIM-cQvHBy4jQnGH0fVZ_RhK&si=ZP2qz94NHXBrj-Fy
 
 ## Directory structure for placing style files and scripts:
->./src/styles/\*\*/\*.scss 
->./src/scripts/\*\*/\*.js
+>./src/styles/\*\*/\*.scss  
+>./src/scripts/\*\*/\*.js  
 
 ## How to use:
 1. Download all files to any directory
