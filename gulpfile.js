@@ -1,79 +1,3 @@
-// const gulp = require('gulp');
-// const rename = require('gulp-rename');
-// const cleanCSS = require('gulp-clean-css');
-
-// const sass = require('gulp-sass')(require('sass'));
-
-// const paths = {
-//     styles: {
-//         src: 'src/styles/**/*.scss', // источник откуда будут браться исходные файлы
-//         dest: 'dist/css/' // конечная папка с готовыми файлами
-//     },
-//     scripts: {
-//         src: 'src/styles/**/*.js', // источник где будут исходные файлы
-//         dest: 'dist/js/' // конечная папка с готовыми файлами
-//     }
-// }
-
-// async function clean() { // Cleaning folders
-//     const { deleteAsync } = await import('del');
-//     return deleteAsync(['dist']) // Указываем папку, которая будет очищаться
-// }
-
-// function styles() {
-//     return gulp.src(paths.styles.src)// Передаём путь откуда берутся файлы для обработки
-//     // Подключаем необходимые модули для обработки переданных файлов
-//         .pipe(sass().on('error', sass.logError)) // Компеляция SCSS в CSS
-//         .pipe(cleanCSS()) // Минификация файлов CSS - удаление пробелов, лишних ";", всех абзацов
-//         .pipe(rename({
-//             basename: 'main',
-//             suffix: '.min'
-//         }))
-//         .pipe(gulp.dest(paths.styles.dest));
-// }
-
-
-// function watch() { // Отслеживаем изменения
-//     gulp.watch(paths.styles.src, styles) // Сперва указываем путь к файлам которые будем отслеживать, потом передаётся таска (функция) которая будет выполняться при изменении в этих файлах
-
-// }
-// exports.clean = clean; // "cleaner" - name of command in gulp, "clean" - name of our function
-// exports.styles = styles;
-// exports.watch = watch;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 const gulp = require('gulp');
 const rename = require('gulp-rename');
 const cleanCSS = require('gulp-clean-css');
@@ -158,4 +82,4 @@ const buildSeris = gulp.series(clean, gulp.parallel(styles, scripts), watch);
 // const buildParalel = gulp.parallel(clean, styles); // parallel() выполняет задачи паралельно
 
 exports.build = buildSeris; // To run task write in terminal 'gulp build'
-exports.default = buildSeris; // Just write in terminal 'gulp'
+exports.default = buildSeris; // Just write in terminal gulp'
