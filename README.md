@@ -3,7 +3,7 @@
 
 ## Directory structure for placing style files and scripts:
 >./src/styles/\*\*/\*.scss  
->./src/scripts/\*\*/\*.js
+>./src/scripts/\*\*/\*.js  
 >./src/img/\*\*/\**  
 
 ## How to use:
