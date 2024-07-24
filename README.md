@@ -1,4 +1,4 @@
-# Gulp build created based on ITDoctor lessons
+# Gulp 5. Build created based on ITDoctor lessons
 ## Source https://youtube.com/playlist?list=PLuY6eeDuleIM-cQvHBy4jQnGH0fVZ_RhK&si=ZP2qz94NHXBrj-Fy
 
 ## Directory structure for placing style files and scripts:
