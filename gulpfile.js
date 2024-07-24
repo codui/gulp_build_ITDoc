@@ -3,13 +3,14 @@ const rename = require('gulp-rename');
 const cleanCSS = require('gulp-clean-css');
 const sass = require('gulp-sass')(require('sass'));
 const sourcemaps = require('gulp-sourcemaps');
+
 const postcss = require('gulp-postcss');
+const autoprefixer = require('autoprefixer');
 
 const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
 const concat = require('gulp-concat');
 
-// ! const autoprefixer = require('autoprefixer');
 
 // Paths to files
 const paths = {
@@ -42,15 +43,13 @@ function styles() {
             //     indentWidth: 4,
             // }
         ).on('error', sass.logError)) // compiling SCSS to CSS
-        // .pipe(postcss([autoprefixer({
-        //     cascade: false
-        // })]))
+        .pipe(postcss([autoprefixer()]))
         .pipe(cleanCSS()) // minification of CSS files - removal of spaces, extra ";", all paragraphs
         .pipe(rename({
             basename: 'main',
             suffix: '.min'
         }))
-        .pipe(sourcemaps.write())
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(paths.styles.dest));
 }
 
@@ -58,12 +57,14 @@ function styles() {
 function scripts() {
     return gulp.src(paths.scripts.src
         //, { sourcemaps: true }
-        )
+    )
         .pipe(sourcemaps.init())
-        .pipe(babel()) // transpiles javascript code into old standard code javascript, for old browsers
+        .pipe(babel({
+            presets: ['@babel/env']
+        })) // transpiles javascript code into old standard code javascript, for old browsers
         .pipe(uglify()) // minifies, compresses and optimizes javascript files
         .pipe(concat('main.min.js')) // combine the files into one and immediately give the name to the combined file
-        .pipe(sourcemaps.write())
+        .pipe(sourcemaps.write('.'))
         .pipe(gulp.dest(paths.scripts.dest))
 }
 
