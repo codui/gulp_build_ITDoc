@@ -1,19 +1,30 @@
-const gulp = require('gulp');
-const rename = require('gulp-rename');
-const cleanCSS = require('gulp-clean-css');
-const sass = require('gulp-sass')(require('sass'));
-const sourcemaps = require('gulp-sourcemaps');
+// gulpfile.mjs
+import gulp from 'gulp';
+import rename from 'gulp-rename';
+import cleanCSS from 'gulp-clean-css';
 
-const postcss = require('gulp-postcss');
-const autoprefixer = require('autoprefixer');
+// import dartSass from 'sass';
+import gulpSass from 'gulp-sass';
+import * as scss from 'sass'
+const sass = gulpSass(scss);
 
-const babel = require('gulp-babel');
-const uglify = require('gulp-uglify');
-const concat = require('gulp-concat');
-
+import sourcemaps from 'gulp-sourcemaps';
+import postcss from 'gulp-postcss';
+import autoprefixer from 'autoprefixer';
+import babel from 'gulp-babel';
+import uglify from 'gulp-uglify';
+import concat from 'gulp-concat';
+import imagemin from 'gulp-imagemin';
+// import del from 'del';
+import { deleteAsync } from 'del';
+import htmlmin from 'gulp-htmlmin';
 
 // Paths to files
 const paths = {
+    html: {
+        src: 'src/*.html', // source from where the source files .scss will be taken
+        dest: 'dist' // final folder with ready-made files .css
+    },
     styles: {
         src: 'src/styles/**/*.scss', // source from where the source files .scss will be taken
         dest: 'dist/css/' // final folder with ready-made files .css
@@ -21,28 +32,22 @@ const paths = {
     scripts: {
         src: 'src/scripts/**/*.js', // source from where the source files .js will be taken
         dest: 'dist/js/' // final folder with ready-made files .js
+    },
+    images: {
+        src: 'src/img/*',
+        dest: 'dist/img'
     }
 };
 
 async function clean() { // Cleaning folders
-    const { deleteAsync } = await import('del');
     return deleteAsync(['dist']); // specify the folder that will be deleted
 }
 
 // Processing style files. Compilation of SCSS into CSS and other operations
 function styles() {
-    return gulp.src(paths.styles.src // pass the path from where the files for processing come from
-        //     , {
-        //     sourcemaps: true
-        // }
-    )
+    return gulp.src(paths.styles.src)
         .pipe(sourcemaps.init())
-        .pipe(sass(
-            //     {
-            //     outputStyle: 'expanded',
-            //     indentWidth: 4,
-            // }
-        ).on('error', sass.logError)) // compiling SCSS to CSS
+        .pipe(sass().on('error', sass.logError)) // compiling SCSS to CSS
         .pipe(postcss([autoprefixer()]))
         .pipe(cleanCSS()) // minification of CSS files - removal of spaces, extra ";", all paragraphs
         .pipe(rename({
@@ -55,9 +60,7 @@ function styles() {
 
 // Processing javascript files
 function scripts() {
-    return gulp.src(paths.scripts.src
-        //, { sourcemaps: true }
-    )
+    return gulp.src(paths.scripts.src)
         .pipe(sourcemaps.init())
         .pipe(babel({
             presets: ['@babel/env']
@@ -68,6 +71,21 @@ function scripts() {
         .pipe(gulp.dest(paths.scripts.dest))
 }
 
+function img() {
+    return gulp.src(paths.images.src, { encoding: false })
+        .pipe(imagemin({
+            progressive: true
+        }))
+        .pipe(gulp.dest(paths.images.dest));
+}
+
+
+function htmlMinify() {
+    return gulp.src(paths.html.src)
+        .pipe(htmlmin({ collapseWhitespace: true }))
+        .pipe(gulp.dest(paths.html.dest));
+}
+
 function watch() { // Track changes
     gulp.watch(paths.styles.src, styles);
     /* first, we specify the path to the files that we will track, 
@@ -76,17 +94,12 @@ function watch() { // Track changes
     gulp.watch(paths.scripts.src, scripts);
 }
 
-
-
-// Export tasks
-exports.clean = clean; // "cleaner" - name of command in gulp, "clean" - name of our function
-exports.styles = styles;
-exports.scripts = scripts;
-exports.watch = watch;
+// Export functions as tasks
+export { clean, styles, scripts, img, htmlMinify, watch };
 
 // series() performs tasks in sequence
-const buildSeris = gulp.series(clean, gulp.parallel(styles, scripts), watch);
+const build = gulp.series(clean, htmlMinify, gulp.parallel(styles, scripts, img), watch);
 // const buildParalel = gulp.parallel(clean, styles); // parallel() performs tasks in parallel
 
-exports.build = buildSeris; // To run task write in terminal 'gulp build'
-exports.default = buildSeris; // Just write in terminal gulp'
+export { build };
+export default build; // Just write in terminal gulp
