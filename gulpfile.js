@@ -18,6 +18,7 @@ import imagemin from 'gulp-imagemin';
 // import del from 'del';
 import { deleteAsync } from 'del';
 import htmlmin from 'gulp-htmlmin';
+import size from 'gulp-size';
 
 // Paths to files
 const paths = {
@@ -43,6 +44,16 @@ async function clean() { // Cleaning folders
     return deleteAsync(['dist']); // specify the folder that will be deleted
 }
 
+
+function htmlMinify() {
+    return gulp.src(paths.html.src)
+        .pipe(htmlmin({ collapseWhitespace: true }))
+        .pipe(size({
+            showFiles: true
+        }))
+        .pipe(gulp.dest(paths.html.dest));
+}
+
 // Processing style files. Compilation of SCSS into CSS and other operations
 function styles() {
     return gulp.src(paths.styles.src)
@@ -55,6 +66,9 @@ function styles() {
             suffix: '.min'
         }))
         .pipe(sourcemaps.write('.'))
+        .pipe(size({
+            showFiles: true
+        }))
         .pipe(gulp.dest(paths.styles.dest));
 }
 
@@ -68,23 +82,24 @@ function scripts() {
         .pipe(uglify()) // minifies, compresses and optimizes javascript files
         .pipe(concat('main.min.js')) // combine the files into one and immediately give the name to the combined file
         .pipe(sourcemaps.write('.'))
+        .pipe(size({
+            showFiles: true
+        }))
         .pipe(gulp.dest(paths.scripts.dest))
 }
+
 
 function img() {
     return gulp.src(paths.images.src, { encoding: false })
         .pipe(imagemin({
             progressive: true
         }))
+        .pipe(size({
+            showFiles: true
+        }))
         .pipe(gulp.dest(paths.images.dest));
 }
 
-
-function htmlMinify() {
-    return gulp.src(paths.html.src)
-        .pipe(htmlmin({ collapseWhitespace: true }))
-        .pipe(gulp.dest(paths.html.dest));
-}
 
 function watch() { // Track changes
     gulp.watch(paths.styles.src, styles);
