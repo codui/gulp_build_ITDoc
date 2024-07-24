@@ -1,4 +1,4 @@
-console.log('Hello, Gulp!');
+console.log('Hello, Browser!');
 class User {
     sayHi() {
         console.log('Hello, Babel!');

@@ -21,6 +21,9 @@ import htmlmin from 'gulp-htmlmin';
 import size from 'gulp-size';
 import newer from 'gulp-newer';
 
+import browserSync from 'browser-sync';
+browserSync.create();
+
 // Paths to files
 const paths = {
     html: {
@@ -36,7 +39,7 @@ const paths = {
         dest: 'dist/js/' // final folder with ready-made files .js
     },
     images: {
-        src: 'src/img/*',
+        src: 'src/img/**',
         dest: 'dist/img'
     }
 };
@@ -52,7 +55,8 @@ function htmlMinify() {
         .pipe(size({
             showFiles: true
         }))
-        .pipe(gulp.dest(paths.html.dest));
+        .pipe(gulp.dest(paths.html.dest))
+        .pipe(browserSync.stream());
 }
 
 // Processing style files. Compilation of SCSS into CSS and other operations
@@ -70,7 +74,8 @@ function styles() {
         .pipe(size({
             showFiles: true
         }))
-        .pipe(gulp.dest(paths.styles.dest));
+        .pipe(gulp.dest(paths.styles.dest))
+        .pipe(browserSync.stream());
 }
 
 // Processing javascript files
@@ -87,10 +92,11 @@ function scripts() {
             showFiles: true
         }))
         .pipe(gulp.dest(paths.scripts.dest))
+        .pipe(browserSync.stream());
 }
 
 
-function img() {
+function imgTask() {
     return gulp.src(paths.images.src, { encoding: false })
         .pipe(newer(paths.images.dest))
         .pipe(imagemin({
@@ -104,18 +110,29 @@ function img() {
 
 
 function watch() { // Track changes
+    // browserSync.init({
+    //     server: "./src/"
+    // });
+    browserSync.init({
+        server: {
+            baseDir: "./dist"
+        }
+    });
+    gulp.watch(paths.html.dest).on('change', browserSync.reload);
+    gulp.watch(paths.html.src, htmlMinify);
     gulp.watch(paths.styles.src, styles);
     /* first, we specify the path to the files that we will track, 
     then a task (function) is transmitted, which 
     will be executed when changing in these files */
     gulp.watch(paths.scripts.src, scripts);
+    gulp.watch(paths.images.src, imgTask);
 }
 
 // Export functions as tasks
-export { clean, styles, scripts, img, htmlMinify, watch };
+export { clean, styles, scripts, imgTask, htmlMinify, watch };
 
 // series() performs tasks in sequence
-const build = gulp.series(clean, htmlMinify, gulp.parallel(styles, scripts, img), watch);
+const build = gulp.series(clean, htmlMinify, gulp.parallel(styles, scripts, imgTask), watch);
 // const buildParalel = gulp.parallel(clean, styles); // parallel() performs tasks in parallel
 
 export { build };
