@@ -29,7 +29,6 @@
 [@babel/core](https://www.npmjs.com/package/@babel/core)  
 [@babel/preset-env](https://www.npmjs.com/package/@babel/preset-env)  
 [gulp-uglify](https://www.npmjs.com/package/gulp-uglify)  
-
 [gulp-htmlmin](https://www.npmjs.com/package/gulp-htmlmin)  
 [browser-sync](https://www.npmjs.com/package/browser-sync)  
 [browser-sync doc](https://browsersync.io/docs/gulp)  
