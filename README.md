@@ -4,7 +4,7 @@
 ## Directory structure for placing style files and scripts:
 >./src/styles/\*\*/\*.scss  
 >./src/scripts/\*\*/\*.js  
->./src/img/\*\*/\**  
+>./src/img/\*\*  
 
 ## How to use:
 1. Download all files to any directory
