@@ -19,6 +19,7 @@ import imagemin from 'gulp-imagemin';
 import { deleteAsync } from 'del';
 import htmlmin from 'gulp-htmlmin';
 import size from 'gulp-size';
+import newer from 'gulp-newer';
 
 // Paths to files
 const paths = {
@@ -41,7 +42,7 @@ const paths = {
 };
 
 async function clean() { // Cleaning folders
-    return deleteAsync(['dist']); // specify the folder that will be deleted
+    return deleteAsync(['dist/*', '!dist/img']); // specify the folder that will be deleted
 }
 
 
@@ -91,6 +92,7 @@ function scripts() {
 
 function img() {
     return gulp.src(paths.images.src, { encoding: false })
+        .pipe(newer(paths.images.dest))
         .pipe(imagemin({
             progressive: true
         }))
