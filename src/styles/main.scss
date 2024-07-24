@@ -1,6 +1,23 @@
 body {
     display: grid;
+
     p {
+        width: fit-content;
+        animation: slidein linear 1s infinite alternate none;
         color: blueviolet;
+    }
+}
+
+::placeholder {
+    color: orange;
+}
+
+@keyframes slidein {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(50px);
     }
 }
