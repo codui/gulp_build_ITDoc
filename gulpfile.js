@@ -31,7 +31,7 @@ const paths = {
         dest: 'dist' // final folder with ready-made files .css
     },
     styles: {
-        src: 'src/styles/**/*.scss', // source from where the source files .scss will be taken
+        src: 'src/scss/**/*.scss', // source from where the source files .scss will be taken
         dest: 'dist/css/' // final folder with ready-made files .css
     },
     scripts: {
@@ -39,13 +39,13 @@ const paths = {
         dest: 'dist/js/' // final folder with ready-made files .js
     },
     images: {
-        src: 'src/img/**',
-        dest: 'dist/img'
+        src: 'src/images/**/*.*',
+        dest: 'dist/images'
     }
 };
 
 async function clean() { // Cleaning folders
-    return deleteAsync(['dist/*', '!dist/img']); // specify the folder that will be deleted
+    return deleteAsync(['dist/*', '!dist/images']); // specify the folder that will be deleted
 }
 
 
@@ -97,7 +97,7 @@ function scripts() {
 
 
 function imgTask() {
-    return gulp.src(paths.images.src, { encoding: false })
+    return gulp.src(paths.images.src, { encoding: false }) // {encoding: false} чтобы gulp корректно обрабатывал изображения
         .pipe(newer(paths.images.dest))
         .pipe(imagemin({
             progressive: true
