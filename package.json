@@ -24,14 +24,19 @@
     "gulp-clean-css": "^4.3.0",
     "gulp-concat": "^2.6.1",
     "gulp-htmlmin": "^5.0.1",
-    "gulp-imagemin": "^7.1.0",
+    "gulp-imagemin": "^9.1.0",
     "gulp-newer": "^1.4.0",
     "gulp-postcss": "^10.0.0",
     "gulp-rename": "^2.0.0",
     "gulp-sass": "^5.1.0",
     "gulp-size": "^5.0.0",
     "gulp-sourcemaps": "^3.0.0",
+    "gulp-ttf-to-woff": "^1.0.3",
+    "gulp-ttf2woff2": "^4.0.1",
     "gulp-uglify": "^3.0.2",
-    "sass": "^1.77.8"
+    "gulp-webp": "^5.0.0",
+    "gulp-webp-html-nosvg": "^1.1.1",
+    "sass": "^1.77.8",
+    "ttf2woff": "^3.0.0"
   }
 }

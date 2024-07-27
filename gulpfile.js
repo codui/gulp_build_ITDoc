@@ -14,8 +14,11 @@ import autoprefixer from 'autoprefixer';
 import babel from 'gulp-babel';
 import uglify from 'gulp-uglify';
 import concat from 'gulp-concat';
+
 import imagemin from 'gulp-imagemin';
-// import del from 'del';
+import webp from 'gulp-webp';
+import webpHtml from 'gulp-webp-html-nosvg';
+
 import { deleteAsync } from 'del';
 import htmlmin from 'gulp-htmlmin';
 import size from 'gulp-size';
@@ -24,8 +27,15 @@ import newer from 'gulp-newer';
 import browserSync from 'browser-sync';
 browserSync.create();
 
+import ttf2woff2 from 'gulp-ttf2woff2';
+
+
 // Paths to files
 const paths = {
+    fonts: {
+        src: 'src/fonts/*.*',
+        dest: 'dist/fonts'
+    },
     html: {
         src: 'src/*.html', // source from where the source files .scss will be taken
         dest: 'dist' // final folder with ready-made files .css
@@ -39,18 +49,27 @@ const paths = {
         dest: 'dist/js/' // final folder with ready-made files .js
     },
     images: {
-        src: 'src/images/**/*.*',
+        src: 'src/images/**',
         dest: 'dist/images'
     }
 };
 
 async function clean() { // Cleaning folders
-    return deleteAsync(['dist/*', '!dist/images']); // specify the folder that will be deleted
+    return deleteAsync(['dist/*']); // '!dist/images' specify the folder that will be deleted
 }
 
 
-function htmlMinify() {
+function fontsTask() {
+    return gulp.src('src/fonts/*.ttf')
+        .pipe(ttf2woff2())
+        .pipe(gulp.src(paths.fonts.src))
+        .pipe(gulp.dest('dist/fonts'));
+}
+
+
+function htmTask() {
     return gulp.src(paths.html.src)
+        .pipe(webpHtml())
         .pipe(htmlmin({ collapseWhitespace: true }))
         .pipe(size({
             showFiles: true
@@ -99,9 +118,14 @@ function scripts() {
 function imgTask() {
     return gulp.src(paths.images.src, { encoding: false }) // {encoding: false} чтобы gulp корректно обрабатывал изображения
         .pipe(newer(paths.images.dest))
+        .pipe(webp())
+
+        .pipe(gulp.src(paths.images.src, { encoding: false }))
+        .pipe(newer(paths.images.dest))
         .pipe(imagemin({
             progressive: true
         }))
+
         .pipe(size({
             showFiles: true
         }))
@@ -118,22 +142,24 @@ function watch() { // Track changes
             baseDir: "./dist"
         }
     });
-    gulp.watch(paths.html.dest).on('change', browserSync.reload);
-    gulp.watch(paths.html.src, htmlMinify);
+    gulp.watch(paths.html.src, htmTask);
     gulp.watch(paths.styles.src, styles);
     /* first, we specify the path to the files that we will track, 
     then a task (function) is transmitted, which 
     will be executed when changing in these files */
     gulp.watch(paths.scripts.src, scripts);
     gulp.watch(paths.images.src, imgTask);
+    gulp.watch(paths.fonts.src, fontsTask);
+    gulp.watch(paths.html.dest).on('change', browserSync.reload);
 }
 
-// Export functions as tasks
-export { clean, styles, scripts, imgTask, htmlMinify, watch };
 
 // series() performs tasks in sequence
-const build = gulp.series(clean, htmlMinify, gulp.parallel(styles, scripts, imgTask), watch);
+const build = gulp.series(clean, fontsTask, htmTask, gulp.parallel(styles, scripts, imgTask), watch);
 // const buildParalel = gulp.parallel(clean, styles); // parallel() performs tasks in parallel
+
+// Export functions as tasks
+export { clean, fontsTask, styles, scripts, imgTask, htmTask, watch };
 
 export { build };
 export default build; // Just write in terminal gulp
