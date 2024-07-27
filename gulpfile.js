@@ -67,6 +67,24 @@ function fontsTask() {
 }
 
 
+function imgTask() {
+    return gulp.src(paths.images.src, { encoding: false }) // {encoding: false} чтобы gulp корректно обрабатывал изображения
+        .pipe(newer(paths.images.dest))
+        .pipe(webp())
+
+        .pipe(gulp.src(paths.images.src, { encoding: false }))
+        .pipe(newer(paths.images.dest))
+        .pipe(imagemin({
+            progressive: true
+        }))
+
+        .pipe(size({
+            showFiles: true
+        }))
+        .pipe(gulp.dest(paths.images.dest));
+}
+
+
 function htmTask() {
     return gulp.src(paths.html.src)
         .pipe(webpHtml())
@@ -112,24 +130,6 @@ function scripts() {
         }))
         .pipe(gulp.dest(paths.scripts.dest))
         .pipe(browserSync.stream());
-}
-
-
-function imgTask() {
-    return gulp.src(paths.images.src, { encoding: false }) // {encoding: false} чтобы gulp корректно обрабатывал изображения
-        .pipe(newer(paths.images.dest))
-        .pipe(webp())
-
-        .pipe(gulp.src(paths.images.src, { encoding: false }))
-        .pipe(newer(paths.images.dest))
-        .pipe(imagemin({
-            progressive: true
-        }))
-
-        .pipe(size({
-            showFiles: true
-        }))
-        .pipe(gulp.dest(paths.images.dest));
 }
 
 
