@@ -3,7 +3,6 @@ import gulp from 'gulp';
 import rename from 'gulp-rename';
 import cleanCSS from 'gulp-clean-css';
 
-// import dartSass from 'sass';
 import gulpSass from 'gulp-sass';
 import * as scss from 'sass'
 const sass = gulpSass(scss);
@@ -29,11 +28,10 @@ browserSync.create();
 
 import ttf2woff2 from 'gulp-ttf2woff2';
 
-
 // Paths to files
 const paths = {
     fonts: {
-        src: 'src/fonts/*.*',
+        src: 'src/fonts/*.ttf',
         dest: 'dist/fonts'
     },
     html: {
@@ -59,11 +57,12 @@ async function clean() { // Cleaning folders
 }
 
 
-function fontsTask() {
-    return gulp.src('src/fonts/*.ttf')
+function fontsTask(done) {
+    return gulp.src(paths.fonts.src)
         .pipe(ttf2woff2())
         .pipe(gulp.src(paths.fonts.src))
-        .pipe(gulp.dest('dist/fonts'));
+        .pipe(gulp.dest(paths.fonts.dest))
+        .on('end', done);
 }
 
 
@@ -134,9 +133,6 @@ function scripts() {
 
 
 function watch() { // Track changes
-    // browserSync.init({
-    //     server: "./src/"
-    // });
     browserSync.init({
         server: {
             baseDir: "./dist"
@@ -153,13 +149,13 @@ function watch() { // Track changes
     gulp.watch(paths.html.dest).on('change', browserSync.reload);
 }
 
+// Export functions as tasks
+export { clean, fontsTask, styles, scripts, imgTask, htmTask, watch };
 
 // series() performs tasks in sequence
 const build = gulp.series(clean, fontsTask, htmTask, gulp.parallel(styles, scripts, imgTask), watch);
 // const buildParalel = gulp.parallel(clean, styles); // parallel() performs tasks in parallel
 
-// Export functions as tasks
-export { clean, fontsTask, styles, scripts, imgTask, htmTask, watch };
 
 export { build };
 export default build; // Just write in terminal gulp

@@ -2,9 +2,11 @@
 ## Source https://youtube.com/playlist?list=PLuY6eeDuleIM-cQvHBy4jQnGH0fVZ_RhK&si=ZP2qz94NHXBrj-Fy
 
 ## Directory structure for placing style files and scripts:
->./src/scss/\*\*/\*.scss  
->./src/scripts/\*\*/\*.js  
->./src/images/\*\*/\*.\*  
+>./src/fonts/font-for-git.ttf  
+>./src/images/image-for-git.jpg  
+>./src/scss/\*\*/main.scss  
+>./src/scripts/\*\*/main.js  
+>./index.html
 
 ## How to use:
 1. Download all files to any directory
@@ -35,3 +37,6 @@
 [gulp-imagemin](https://www.npmjs.com/package/gulp-imagemin)  
 [gulp-newer](https://www.npmjs.com/package/gulp-newer)  
 [gulp-size](https://www.npmjs.com/package/gulp-size)  
+[gulp-ttf2woff2](https://www.npmjs.com/package/gulp-ttf2woff2)
+[gulp-webp](https://www.npmjs.com/package/gulp-webp)
+[gulp-webp-html-nosvg](https://www.npmjs.com/package/gulp-webp-html-nosvg)
