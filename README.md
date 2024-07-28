@@ -41,3 +41,4 @@
 [gulp-ttf2woff2](https://www.npmjs.com/package/gulp-ttf2woff2)  
 [gulp-webp](https://www.npmjs.com/package/gulp-webp)  
 [gulp-webp-html-nosvg](https://www.npmjs.com/package/gulp-webp-html-nosvg)  
+[ttf2woff](https://github.com/fontello/ttf2woff)
