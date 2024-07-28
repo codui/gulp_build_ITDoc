@@ -7,7 +7,7 @@
 >./src/lib-ttf-to-woff/font-ttf-woff.js  
 >./src/scss/\*\*/main.scss  
 >./src/scripts/\*\*/main.js  
->./index.html
+>./src/index.html
 
 ## How to use:
 1. Download all files to any directory
