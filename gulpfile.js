@@ -27,7 +27,7 @@ import browserSync from 'browser-sync';
 browserSync.create();
 
 import ttf2woff2 from 'gulp-ttf2woff2';
-import { makeConvert } from './src/lib-ttf-to-woff/list-files.js';
+import { makeConvert } from './src/lib-ttf-to-woff/font-ttf-woff.js';
 
 // Paths to files
 const paths = {
