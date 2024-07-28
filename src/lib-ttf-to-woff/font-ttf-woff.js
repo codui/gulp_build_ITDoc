@@ -14,4 +14,30 @@ async function convertTTFtoWOFF(inputPath, outputPath) {
 }
 
 
-export {convertTTFtoWOFF};
+function getFilesInDirectory(dirPath) {
+    return new Promise((resolve, reject) => {
+        fs.readdir(dirPath, (err, files) => {
+            if (err) {
+                reject('Inable to scan directory: ' + err);
+            }
+            resolve(files);
+        })
+    })
+}
+
+
+async function makeConvert(directoryFontsPath = './src/fonts') {
+    let sourceInputTtfFonts = './src/fonts/';
+    let sourceOutputTtfFonts = './dist/fonts/';
+    try {
+        let files = await getFilesInDirectory(directoryFontsPath); // get font files with extension .ttf
+        files.forEach(file => {
+            let fileFontName = file.split('.')[0];
+                convertTTFtoWOFF(`${sourceInputTtfFonts}${fileFontName}.ttf`, `${sourceOutputTtfFonts}${fileFontName}.woff`)
+        });
+    } catch (err) {
+        console.error(err);
+    }  
+}
+
+export {makeConvert};
