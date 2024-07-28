@@ -4,7 +4,7 @@
 ## Directory structure for placing style files and scripts:
 >./src/fonts/font-for-git.ttf  
 >./src/images/image-for-git.jpg  
->./src/lib-ttf-to-woff/font-ttf-woff.js, list-files.js  
+>./src/lib-ttf-to-woff/font-ttf-woff.js  
 >./src/scss/\*\*/main.scss  
 >./src/scripts/\*\*/main.js  
 >./index.html
