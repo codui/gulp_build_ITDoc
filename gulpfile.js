@@ -27,6 +27,7 @@ import browserSync from 'browser-sync';
 browserSync.create();
 
 import ttf2woff2 from 'gulp-ttf2woff2';
+import { makeConvert } from './src/lib-ttf-to-woff/list-files.js';
 
 // Paths to files
 const paths = {
@@ -52,8 +53,14 @@ const paths = {
     }
 };
 
+
 async function clean() { // Cleaning folders
     return deleteAsync(['dist/*']); // '!dist/images' specify the folder that will be deleted
+}
+
+
+async function ttfToWoff() {
+    return makeConvert();
 }
 
 
@@ -150,10 +157,10 @@ function watch() { // Track changes
 }
 
 // Export functions as tasks
-export { clean, fontsTask, styles, scripts, imgTask, htmTask, watch };
+export { clean, fontsTask, ttfToWoff, styles, scripts, imgTask, htmTask, watch };
 
 // series() performs tasks in sequence
-const build = gulp.series(clean, fontsTask, htmTask, gulp.parallel(styles, scripts, imgTask), watch);
+const build = gulp.series(clean, fontsTask, htmTask, ttfToWoff, gulp.parallel(styles, scripts, imgTask), watch);
 // const buildParalel = gulp.parallel(clean, styles); // parallel() performs tasks in parallel
 
 
